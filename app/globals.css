@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 329 90% 55%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 210 79% 65%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 41 98% 60%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 329 90% 55%;
+    --radius: 0.5rem;
+    --chart-1: 329 90% 55%;
+    --chart-2: 210 79% 65%;
+    --chart-3: 41 98% 60%;
+    --chart-4: 120 65% 50%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 240 10% 3.9%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 240 5.9% 90%;
+    --sidebar-ring: 240 5.9% 10%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 329 90% 65%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 210 79% 65%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 41 98% 60%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 329 90% 65%;
+    --chart-1: 329 90% 65%;
+    --chart-2: 210 79% 65%;
+    --chart-3: 41 98% 60%;
+    --chart-4: 120 65% 50%;
+    --sidebar: 240 10% 3.9%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .colorful-gradient {
+    @apply bg-gradient-rainbow bg-clip-text text-transparent animate-shimmer;
+    background-size: 200% 100%;
+  }
+
+  .category-badge {
+    @apply text-xs font-medium px-3 py-1 rounded-full transition-colors;
+  }
+
+  .category-badge-technology {
+    @apply bg-apple-blue/10 text-apple-blue;
+  }
+
+  .category-badge-design {
+    @apply bg-apple-purple/10 text-apple-purple;
+  }
+
+  .category-badge-development {
+    @apply bg-apple-green/10 text-apple-green;
+  }
+
+  .category-badge-privacy {
+    @apply bg-apple-red/10 text-apple-red;
+  }
+
+  .category-badge-sustainability {
+    @apply bg-apple-mint/10 text-apple-mint;
+  }
+
+  .category-badge-ux {
+    @apply bg-apple-orange/10 text-apple-orange;
+  }
+
+  /* Default for other categories */
+  .category-badge-default {
+    @apply bg-apple-teal/10 text-apple-teal;
+  }
+}
+
+.prose {
+  max-width: 100%;
+}
+
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  @apply text-apple-blue dark:text-apple-teal;
+}
+
+.prose img {
+  margin: 2rem auto;
+  border-radius: 0.5rem;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply text-apple-purple dark:text-apple-pink;
+}
+
+/* Animated background */
+.animated-gradient {
+  background: linear-gradient(45deg, #ff3b30, #ff9500, #ffcc00, #34c759, #5ac8fa, #007aff, #5856d6, #af52de, #ff2d55);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
