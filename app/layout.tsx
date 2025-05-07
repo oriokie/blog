@@ -1,50 +1,51 @@
 import type React from "react"
 import "@/app/globals.css"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
-import { AuthProvider } from "@/contexts/auth-context"
+import { Providers } from "@/components/providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
+// Separate viewport export as per Next.js docs
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: {
-    default: "Apple Blog",
-    template: "%s | Apple Blog",
+    default: "OriokieX",
+    template: "%s | OriokieX",
   },
-  description:
-    "A sleek, modern blog with Apple-inspired design. Sharing thoughts on technology, design, and innovation.",
-  keywords: ["apple", "technology", "design", "innovation", "blog"],
-  authors: [{ name: "Apple Blog Team" }],
-  creator: "Apple Blog Team",
+  description: "A sleek, modern blog with innovative features. Sharing thoughts on technology, design, and innovation.",
+  keywords: ["oriokiex", "technology", "design", "innovation", "blog"],
+  authors: [{ name: "OriokieX Team" }],
+  creator: "OriokieX Team",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://apple-blog.vercel.app",
-    title: "Apple Blog",
+    url: "https://oriokiex.vercel.app",
+    title: "OriokieX",
     description:
-      "A sleek, modern blog with Apple-inspired design. Sharing thoughts on technology, design, and innovation.",
-    siteName: "Apple Blog",
+      "A sleek, modern blog with innovative features. Sharing thoughts on technology, design, and innovation.",
+    siteName: "OriokieX",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Apple Blog",
+        alt: "OriokieX",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Apple Blog",
+    title: "OriokieX",
     description:
-      "A sleek, modern blog with Apple-inspired design. Sharing thoughts on technology, design, and innovation.",
+      "A sleek, modern blog with innovative features. Sharing thoughts on technology, design, and innovation.",
     images: ["/og-image.jpg"],
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
   },
   robots: {
     index: true,
@@ -56,7 +57,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -67,11 +68,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <AuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
-          </ThemeProvider>
-        </AuthProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

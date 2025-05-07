@@ -28,8 +28,9 @@ export default function BlogCard({ post, index }: BlogCardProps) {
   const postUrl = `/blog/${post.slug || post._id}`
 
   // Determine category color class
-  const getCategoryClass = (category: string) => {
-    const lowerCategory = category.toLowerCase()
+  const getCategoryClass = (category: string | undefined) => {
+    if (!category) return "category-badge-default"
+    const lowerCategory = String(category).toLowerCase()
     if (lowerCategory.includes("tech")) return "category-badge-technology"
     if (lowerCategory.includes("design")) return "category-badge-design"
     if (lowerCategory.includes("dev")) return "category-badge-development"

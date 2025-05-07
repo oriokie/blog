@@ -66,7 +66,7 @@ export default function Navbar() {
                 />
               </svg>
             </div>
-            <span className="ml-2 hidden sm:inline colorful-gradient">Apple Blog</span>
+            <span className="ml-2 hidden sm:inline colorful-gradient">OriokieX</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">

@@ -2,26 +2,34 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import Image from "next/image"
 import Link from "next/link"
-import { ChevronDown } from "lucide-react"
+import { Search, TrendingUp, Clock, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BlogCard from "@/components/blog-card"
 import { postsAPI } from "@/lib/api"
 
 export default function Home() {
   const [featuredPosts, setFeaturedPosts] = useState([])
   const [recentPosts, setRecentPosts] = useState([])
+  const [trendingPosts, setTrendingPosts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setLoading(true)
-        const [featuredRes, recentRes] = await Promise.all([postsAPI.getFeaturedPosts(), postsAPI.getRecentPosts()])
+        const [featuredRes, recentRes, trendingRes] = await Promise.all([
+          postsAPI.getFeaturedPosts(),
+          postsAPI.getRecentPosts(),
+          postsAPI.getTrendingPosts(),
+        ])
 
         setFeaturedPosts(featuredRes.data)
         setRecentPosts(recentRes.data)
+        setTrendingPosts(trendingRes.data || [])
       } catch (error) {
         console.error("Error fetching posts:", error)
       } finally {
@@ -34,137 +42,167 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900 pt-16">
-        <motion.div
-          className="container mx-auto px-4 md:px-6 text-center relative z-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <motion.h1
-            className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            Thoughts on
-            <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
-              Technology & Design
-            </span>
-          </motion.h1>
+      {/* Hero Section - Simplified for blog focus */}
+      <section className="relative py-16 md:py-24 bg-white dark:bg-gray-950">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <motion.h1
+              className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
+                OriokieX
+              </span>
+            </motion.h1>
 
-          <motion.p
-            className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Exploring the intersection of technology, design, and innovation through the lens of Apple's philosophy.
-          </motion.p>
+            <motion.p
+              className="text-xl text-gray-600 dark:text-gray-300 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Discover stories, ideas, and expertise from writers on any topic.
+            </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row justify-center gap-4 mb-12"
-          >
-            <Link href="/blog">
-              <Button className="bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-gray-900 text-white rounded-full px-8 py-6 text-lg">
-                Read the Blog
-              </Button>
-            </Link>
-            <Link href="/about">
-              <Button
-                variant="outline"
-                className="border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-full px-8 py-6 text-lg"
-              >
-                About Us
-              </Button>
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center z-0 mt-24"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-        >
-          <Image
-            src="/placeholder.svg?height=800&width=1200"
-            alt="Blog Hero"
-            width={1200}
-            height={800}
-            className="max-w-full h-auto object-contain opacity-70 dark:opacity-40"
-            priority
-          />
-        </motion.div>
-
-        <motion.div
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-          animate={{
-            y: [0, 10, 0],
-          }}
-          transition={{
-            repeat: Number.POSITIVE_INFINITY,
-            duration: 1.5,
-            ease: "easeInOut",
-          }}
-        >
-          <ChevronDown className="h-8 w-8 text-gray-400" />
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="max-w-lg mx-auto mb-12"
+            >
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="search"
+                  placeholder="Search articles..."
+                  className="pl-10 py-6 rounded-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
-      {/* Featured Posts Section */}
-      <section className="py-16 md:py-24 bg-white dark:bg-gray-950">
+      {/* Main Content Section */}
+      <section className="py-12 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
-              Featured Articles
-            </h2>
-            <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300">
-              Our most impactful and thought-provoking pieces.
-            </p>
-          </motion.div>
+          <Tabs defaultValue="featured" className="w-full max-w-4xl mx-auto">
+            <TabsList className="grid w-full grid-cols-3 mb-8">
+              <TabsTrigger value="featured" className="flex items-center gap-2">
+                <Star className="h-4 w-4" />
+                Featured
+              </TabsTrigger>
+              <TabsTrigger value="trending" className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Trending
+              </TabsTrigger>
+              <TabsTrigger value="recent" className="flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                Recent
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {loading
-              ? Array(3)
-                  .fill(0)
-                  .map((_, index) => (
-                    <div
-                      key={index}
-                      className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm p-4 h-96 animate-pulse"
-                    >
-                      <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-lg mb-4"></div>
-                      <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
-                      <div className="mt-4 flex items-center">
-                        <div className="h-8 w-8 bg-gray-200 dark:bg-gray-800 rounded-full mr-3"></div>
-                        <div>
-                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-24 mb-1"></div>
-                          <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-32"></div>
+            <TabsContent value="featured" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {loading
+                  ? Array(6)
+                      .fill(0)
+                      .map((_, index) => (
+                        <div
+                          key={index}
+                          className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm p-4 h-96 animate-pulse"
+                        >
+                          <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-lg mb-4"></div>
+                          <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
+                          <div className="mt-4 flex items-center">
+                            <div className="h-8 w-8 bg-gray-200 dark:bg-gray-800 rounded-full mr-3"></div>
+                            <div>
+                              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-24 mb-1"></div>
+                              <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-32"></div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))
-              : featuredPosts.map((post, index) => <BlogCard key={post._id} post={post} index={index} />)}
+                      ))
+                  : featuredPosts.map((post, index) => <BlogCard key={post._id} post={post} index={index} />)}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="trending" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {loading
+                  ? Array(6)
+                      .fill(0)
+                      .map((_, index) => (
+                        <div
+                          key={index}
+                          className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm p-4 h-96 animate-pulse"
+                        >
+                          <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-lg mb-4"></div>
+                          <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
+                          <div className="mt-4 flex items-center">
+                            <div className="h-8 w-8 bg-gray-200 dark:bg-gray-800 rounded-full mr-3"></div>
+                            <div>
+                              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-24 mb-1"></div>
+                              <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-32"></div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                  : trendingPosts.map((post, index) => <BlogCard key={post._id} post={post} index={index} />)}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="recent" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {loading
+                  ? Array(6)
+                      .fill(0)
+                      .map((_, index) => (
+                        <div
+                          key={index}
+                          className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm p-4 h-96 animate-pulse"
+                        >
+                          <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-lg mb-4"></div>
+                          <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
+                          <div className="mt-4 flex items-center">
+                            <div className="h-8 w-8 bg-gray-200 dark:bg-gray-800 rounded-full mr-3"></div>
+                            <div>
+                              <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-24 mb-1"></div>
+                              <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-32"></div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                  : recentPosts.map((post, index) => <BlogCard key={post._id} post={post} index={index} />)}
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          <div className="text-center mt-12">
+            <Link href="/blog">
+              <Button className="bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 dark:text-gray-900 text-white rounded-full px-8 py-3">
+                Explore All Articles
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-16 md:py-24 bg-gray-50 dark:bg-gray-900">
+      <section className="py-16 bg-white dark:bg-gray-950">
         <div className="container mx-auto px-4 md:px-6">
           <motion.div
             className="max-w-2xl mx-auto text-center"
@@ -174,10 +212,10 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
           >
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
-              Stay Updated
+              Never miss a story
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-              Subscribe to our newsletter for the latest articles, insights, and updates.
+              Get the best articles delivered straight to your inbox.
             </p>
             <form className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
               <input
@@ -191,61 +229,6 @@ export default function Home() {
               </Button>
             </form>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Recent Posts Section */}
-      <section className="py-16 md:py-24 bg-white dark:bg-gray-950">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
-              Recent Articles
-            </h2>
-            <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300">The latest from our blog.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {loading
-              ? Array(3)
-                  .fill(0)
-                  .map((_, index) => (
-                    <div
-                      key={index}
-                      className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm p-4 h-96 animate-pulse"
-                    >
-                      <div className="h-48 bg-gray-200 dark:bg-gray-800 rounded-lg mb-4"></div>
-                      <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full mb-2"></div>
-                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3"></div>
-                      <div className="mt-4 flex items-center">
-                        <div className="h-8 w-8 bg-gray-200 dark:bg-gray-800 rounded-full mr-3"></div>
-                        <div>
-                          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-24 mb-1"></div>
-                          <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-32"></div>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-              : recentPosts.map((post, index) => <BlogCard key={post._id} post={post} index={index} />)}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link href="/blog">
-              <Button
-                variant="outline"
-                className="border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-full px-8 py-3"
-              >
-                View All Articles
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
     </div>

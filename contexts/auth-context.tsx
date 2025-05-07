@@ -32,19 +32,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   useEffect(() => {
-    // Check if user is logged in
+    let mounted = true
+
     const checkAuth = async () => {
       try {
         const { data } = await authAPI.getCurrentUser()
-        setUser(data)
+        if (mounted) {
+          setUser(data)
+        }
       } catch (error) {
-        setUser(null)
+        if (mounted) {
+          setUser(null)
+        }
       } finally {
-        setLoading(false)
+        if (mounted) {
+          setLoading(false)
+        }
       }
     }
 
     checkAuth()
+
+    return () => {
+      mounted = false
+    }
   }, [])
 
   const login = async (email: string, password: string) => {
@@ -53,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setError(null)
       const { data } = await authAPI.login({ email, password })
       setUser(data)
-      router.push("/dashboard")
+      window.location.href = "/dashboard"
     } catch (error: any) {
       setError(error.response?.data?.message || "Login failed")
     } finally {
@@ -67,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setError(null)
       const { data } = await authAPI.register(userData)
       setUser(data)
-      router.push("/dashboard")
+      window.location.href = "/dashboard"
     } catch (error: any) {
       setError(error.response?.data?.message || "Registration failed")
     } finally {

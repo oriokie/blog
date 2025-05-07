@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { Menu, Search, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { UserMenu } from "@/components/dashboard/user-menu"
 
 interface HeaderProps {
   onOpenSidebar: () => void
@@ -66,6 +67,7 @@ export default function DashboardHeader({ onOpenSidebar }: HeaderProps) {
               View Blog
             </Button>
           </Link>
+          <UserMenu />
         </div>
       </div>
     </header>
